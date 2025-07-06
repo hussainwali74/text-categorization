@@ -1,23 +1,68 @@
+![Category Classification](img.png)
+
 # Category Classification
-This script reads in a CSV file called source.csv, classifies rows into categories based on a categories dictionary, and outputs the classified CSV to data_output.csv.
-## Instructions
-1. Make sure you have the required libraries installed:
-`pip install pandas fuzzywuzzy multiprocessing`
-2. Place source.csv and categories_dict.json in the same directory as the script.
-3. categories_dict.json should be a JSON dictionary mapping category names to lists of keywords, for example:
-json
+
+This is a script to categorize rows of a CSV file into custom categories using both exact and fuzzy matching. The classification is driven by a user-defined dictionary of categories and keywords and is designed for efficiency with multiprocessing.
+
+## Features
+
+- **Category classification**: Assign categories to rows in a CSV file based on keyword and fuzzy text matching.
+- **Customizable dictionary**: Categories and keywords are defined in a `categories_dict.json` file.
+- **Fuzzy matching**: Uses `fuzzywuzzy`’s token set ratio for flexible matching.
+- **Multiprocessing**: Parallelizes the classification for large datasets.
+- **Simple input/output**: Reads from `source.csv`, outputs to `data_output.csv`.
+- **Easy configuration**: Adjustable fuzzy matching threshold and number of processes.
+
+## Getting Started
+
+### 1. Install Dependencies
+
+Make sure you have the required Python libraries:
+
+```bash
+pip install pandas fuzzywuzzy multiprocessing
+```
+
+### 2. Prepare Data Files
+
+- Place `source.csv` (the data to classify) and `categories_dict.json` (the category dictionary) in the same directory as the script.
+
+Example `categories_dict.json`:
+
+```json
 {
   "Fruits": ["apple", "banana", "orange"],
-  "Vegetables": ["carrot", "broccoli", "spinach"] 
+  "Vegetables": ["carrot", "broccoli", "spinach"]
 }
-4. Run the script:
+```
+
+### 3. Run the Script
+
+```bash
 python category_classification.py
-5. The output will be written to data_output.csv. It will contain the original CSV data with an added Sub_Category column containing the classified categories.
-6. Adjust the fuzz.token_set_ratio() threshold as needed to control how strict or loose the fuzzy matching is. The default is 70.
-7. The script utilizes multiprocessing to speed up the classification process. Adjust the number of processes initialized in the Pool() call as needed for your system. The default is 5 processes.
-8. Let me know if you have any issues or questions! I'm happy to help explain or clarify any part of this README or the script.
-## About the Script
-This script reads the source CSV, splits it into rows missing a category and rows that already have a category. It then processes the missing rows in chunks using multiprocessing, classifying each row into a category based on:
-1. Exact keyword/phrase matches from the categories dictionary
-2. Fuzzy matching ratios calculated with fuzz.token_set_ratio()
-The processed and original DataFrame chunks are then concatenated back together and exported, resulting in the full source CSV populated with categories.
+```
+
+### 4. Output
+
+- The script generates `data_output.csv` with an added `Sub_Category` column for classified categories.
+
+## Configuration
+
+- **Fuzzy Matching Threshold**: Adjust the threshold in the script to make matching stricter or looser (default: 70).
+- **Multiprocessing**: Set the number of processes in the `Pool()` initialization (default: 5). Increase for larger datasets/systems with more cores.
+
+## How it Works
+
+1. The script reads `source.csv`.
+2. It splits data into rows with and without existing categories.
+3. Rows missing a category are classified using:
+   - Exact keyword/phrase matches from `categories_dict.json`
+   - Fuzzy matching via `fuzz.token_set_ratio()`
+4. The results are merged and exported as `data_output.csv`.
+
+## Troubleshooting
+
+- Ensure `source.csv` and `categories_dict.json` are in the same directory as the script.
+- Check that all required libraries are installed.
+- Adjust the multiprocessing settings if you encounter performance issues.
+- For any questions or issues, feel free to open an issue or contact the maintainer.
